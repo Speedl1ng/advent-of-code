@@ -1,1 +1,4 @@
-/target
+target/
+.zig-cache/
+zig-cache/
+zig-out/
