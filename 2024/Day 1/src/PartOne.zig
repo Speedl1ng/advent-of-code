@@ -18,9 +18,12 @@ pub fn partOne(allocator: std.mem.Allocator, input: [:0]const u8, writer: ?std.f
 
     std.debug.assert(left_input.items.len == right_input.items.len);
     var total: u32 = 0;
-    for (0..right_input.items.len) |_| {
-        const smallest_left = popSmallestFromArray(u32, &left_input);
-        const smallest_right = popSmallestFromArray(u32, &right_input);
+    std.mem.sort(u32, left_input.items, {}, std.sort.asc(u32));
+    std.mem.sort(u32, right_input.items, {}, std.sort.asc(u32));
+
+    for (0..right_input.items.len) |i| {
+        const smallest_left = left_input.items[i];
+        const smallest_right = right_input.items[i];
         total += @abs(@as(i32, @intCast(smallest_left)) - @as(i32, @intCast(smallest_right)));
     }
 

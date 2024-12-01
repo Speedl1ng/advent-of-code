@@ -101,7 +101,11 @@ fn parse_input(args: *std.process.ArgIterator) Runner {
 
 fn benchmark(allocator: std.mem.Allocator, function: BenchmarkFunction) !void {
     const stdout = std.io.getStdOut().writer();
-    var bench = zbench.Benchmark.init(allocator, .{});
+    var bench = zbench.Benchmark.init(allocator, .{
+        .iterations = 10000,
+        .max_iterations = 1000,
+        .time_budget_ns = std.math.maxInt(u64),
+    });
     defer bench.deinit();
 
     try bench.addParam("bench", &function, .{});

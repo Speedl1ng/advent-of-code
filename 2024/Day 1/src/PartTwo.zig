@@ -16,12 +16,21 @@ pub fn partTwo(allocator: std.mem.Allocator, input: [:0]const u8, writer: ?std.f
         try right_input.append(right_number);
     }
 
-    var total: usize = 0;
+    var appearrances_counter = std.AutoHashMap(u32, struct { u32, u32 }).init(allocator);
     for (left_input.items) |item| {
-        const findings = findAppearencesInArray(u32, item, right_input);
-        const appearence_count = item * findings;
+        const res = appearrances_counter.getOrPutValue(item, .{ 0, 0 }) catch @panic("Out Of Memory");
+        res.value_ptr.*[0] += 1;
+    }
+    for (right_input.items) |item| {
+        if (appearrances_counter.getPtr(item)) |val| {
+            val.*[1] += 1;
+        }
+    }
 
-        total += appearence_count;
+    var it = appearrances_counter.iterator();
+    var total: usize = 0;
+    while (it.next()) |entry| {
+        total += entry.key_ptr.* * entry.value_ptr.*[0] * entry.value_ptr.*[1];
     }
 
     if (writer) |out|
