@@ -1,0 +1,15 @@
+.{
+    .name = "template_project_zig",
+    .version = "0.0.0",
+    .dependencies = .{
+        .zbench = .{
+            .url = "git+https://github.com/lateefj/zBench.git#6962b22153078185df8f7bc8fa3fb29945a37f2d",
+            .hash = "1220a7a9fd016fac2e973e6b3baa489fcddeef5fa2459091d73236f8924a0b78a730",
+        },
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+    },
+}
