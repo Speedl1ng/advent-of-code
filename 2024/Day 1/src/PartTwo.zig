@@ -16,7 +16,7 @@ pub fn partTwo(allocator: std.mem.Allocator, input: [:0]const u8, writer: ?std.f
         try right_input.append(right_number);
     }
 
-    var appearrances_counter = std.AutoHashMap(u32, struct { u32, u32 }).init(allocator);
+    var appearrances_counter = std.AutoArrayHashMap(u32, struct { u32, u32 }).init(allocator);
     for (left_input.items) |item| {
         const res = appearrances_counter.getOrPutValue(item, .{ 0, 0 }) catch @panic("Out Of Memory");
         res.value_ptr.*[0] += 1;
