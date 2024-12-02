@@ -1,5 +1,5 @@
 .{
-    .name = "Day 1",
+    .name = "Day 2",
     .version = "0.0.0",
     .dependencies = .{
         .zbench = .{
