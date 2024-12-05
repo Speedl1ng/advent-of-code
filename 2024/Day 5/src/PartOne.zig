@@ -24,7 +24,6 @@ pub fn partOne(allocator: std.mem.Allocator, input: [:0]const u8, writer: ?std.f
     }
 
     var sorted_pages = std.ArrayList(std.ArrayList(u16)).init(allocator);
-    var sorted_pages = std.ArrayList(std.ArrayList(u16)).init(allocator);
 
     for (pages.items) |page| {
         if (check_if_page_is_sorted(ordering_rules, page)) {

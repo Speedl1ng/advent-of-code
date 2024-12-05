@@ -1,6 +1,6 @@
 const std = @import("std");
 
-pub fn partOne(allocator: std.mem.Allocator, input: [:0]const u8, writer: ?std.fs.File.Writer) !void {
+pub fn partTwo(allocator: std.mem.Allocator, input: [:0]const u8, writer: ?std.fs.File.Writer) !void {
     var input_split_iter = std.mem.tokenizeSequence(u8, input, "\r\n\r\n");
 
     const rules = if (input_split_iter.next()) |rules|
