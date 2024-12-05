@@ -7,16 +7,66 @@ pub fn partOne(allocator: std.mem.Allocator, input: [:0]const u8, writer: ?std.f
         try parse_rules(rules, allocator)
     else
         @panic("Input could not been parsed");
-    const updates = if (input_split_iter.next()) |updates|
+    const pages = if (input_split_iter.next()) |updates|
         try parse_updates(updates, allocator)
     else
         @panic("Input could not been parsed");
 
-    std.debug.print("rules: {any}\n", .{rules.items});
-    for (updates.items) |item|
-        std.debug.print("updates: {any}\n", .{item.items});
+    var ordering_rules = std.AutoHashMap(u16, std.ArrayList(u16)).init(allocator);
 
-    _ = writer;
+    var i: usize = 0;
+    while (i < rules.items.len) : (i += 2) {
+        const left = rules.items[i];
+        const right = rules.items[i + 1];
+
+        var result = try ordering_rules.getOrPutValue(left, std.ArrayList(u16).init(allocator));
+        try result.value_ptr.append(right);
+    }
+
+    var sorted_pages = std.ArrayList(std.ArrayList(u16)).init(allocator);
+    var sorted_pages = std.ArrayList(std.ArrayList(u16)).init(allocator);
+
+    for (pages.items) |page| {
+        if (check_if_page_is_sorted(ordering_rules, page)) {
+            try sorted_pages.append(page);
+        }
+    }
+
+    var sum: usize = 0;
+    for (sorted_pages.items) |page| {
+        const mid = @divTrunc(page.items.len, 2);
+        sum += page.items[mid];
+    }
+
+    if (writer) |wt|
+        try wt.print("solution: {}", .{sum});
+}
+
+fn check_if_page_is_sorted(ordering_rules: std.AutoHashMap(u16, std.ArrayList(u16)), page: std.ArrayList(u16)) bool {
+    var already_seen = [_]u16{0} ** 100;
+
+    for (page.items) |number| {
+        //get ruleset for this number
+        const rule: std.ArrayList(u16) = if (ordering_rules.get(number)) |n|
+            n
+        else {
+            already_seen[number] = number;
+
+            continue;
+        };
+
+        //check if any number from rule set was already seen once
+        for (rule.items) |entry| {
+            const seen = already_seen[entry];
+            if (seen != entry) {
+                continue;
+            }
+            return false;
+        }
+        already_seen[number] = number;
+    }
+
+    return true;
 }
 
 fn parse_rules(rules: []const u8, allocator: std.mem.Allocator) !std.ArrayList(u16) {
