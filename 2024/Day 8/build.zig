@@ -1,6 +1,6 @@
 const std = @import("std");
 
-const project_name = "template_project_zig";
+const project_name = "Day 8";
 
 pub fn build(b: *std.Build) void {
     const zbench_module = b.dependency("zbench", .{}).module("zbench");
